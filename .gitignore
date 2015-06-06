@@ -40,6 +40,11 @@ htmlcov/
 nosetests.xml
 coverage.xml
 
+# Personal additions
+.idea/
+test/
+
+
 # Translations
 *.mo
 *.pot
