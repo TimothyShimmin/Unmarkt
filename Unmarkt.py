@@ -2,7 +2,7 @@
 # Unmarkt.py - Removes release group tags from digital comic books (cbr).
 __author__ = 'Tim Shimmin'
 
-import zipfile, os, shutil
+import zipfile, os, shutil, rarfile
 
 # TODO: Use OOP ?
 
@@ -10,27 +10,36 @@ import zipfile, os, shutil
 testdir = 'D:\\Users\\Kat\\Documents\\GitHub\\Unmarkt\\test\\'
 os.chdir(testdir)  # make it the active directory
 
-comic = 'example.zip'  # name of the comic
+comic = 'spider-man.cbr'    # name of the comic
+# # TODO: force CBR to rar
+## if os.path.isfile(comic.replace('.cbr', '.rar')):
+##     os.remove(comic.replace('.cbr', '.rar'))
+# os.rename(comic, comic.replace('.cbr', '.rar'))
+# comic = comic.replace('.cbr', '.rar')
+# print(comic)
 
 
-# Extract from zip file
+# region Extract from rar file
 # TODO: Extract from cbr
-# print(os.path.isfile(comic))
-# if os.path.isfile(comic):             # checks if this comic exists
-extractZip = zipfile.ZipFile(comic)     # set existing zip to this variable
-# extractZip.namelist()                 # read list of file names
+# region ZIP attempt
+## print(os.path.isfile(comic))
+## if os.path.isfile(comic):             # checks if this comic exists
+# extractZip = zipfile.ZipFile(comic)     # set existing zip to this variable
+## extractZip.namelist()                 # read list of file names
+# endregion
 
-# print(testdir + os.sep + extractZip.filename)
-# extractZip.extractall(testdir + '\\' + extractZip.filename)
+extractRar = rarfile.RarFile(comic)     # set existing RAR to this variable
 
-extractDirname = testdir + 'this ' + str(1)
+# extractDirname = testdir + 'extraction folder ' + str(1)
+extractDirname = testdir + comic.replace('.cbr', '')
 print("Extracting here: " + extractDirname)
-extractZip.extractall(extractDirname)
-
-# extractZip.extractall()
-extractZip.close()
+# extractZip.extractall(extractDirname)
+extractRar.extractall(extractDirname)
 
 
+# extractZip.close()
+extractRar.close()
+# endregion
 
 
 
@@ -40,18 +49,10 @@ os.chdir(testdir)  # make it the active directory
 # writeZip = zipfile.ZipFile(comic, 'w')    # 'w' for write (overwrite)
 if os.path.isfile('written ' + comic):
     os.remove('written ' + comic)
-writeZip = zipfile.ZipFile('written ' + comic, 'a')      # 'a' for append to current
+# writeZip = zipfile.ZipFile('written ' + comic, 'a')      # 'a' for append to current
+writeRar = rarfile.RarFile('written ' + comic)      # create rar object to write to
 
 
-# for img in os.listdir(extractDirname):        # TODO: type check
-#     writeZip.write(img, compress_type=zipfile.ZIP_DEFLATED)
-
-# os.chdir(extractDirname)
-# writeZip.write(extractDirname, compress_type=zipfile.ZIP_DEFLATED)    # saves directory folder structure, not the file(s) inside that directory
-
-# for foldername, subfolders, filenames in os.walk(extractDirname):
-#     for filename in filenames:
-#         writeZip.write(extractDirname + '//' + filename, compress_type=zipfile.ZIP_DEFLATED)
 
 os.chdir(extractDirname)                        # TODO: stay in parent folder?
 filenames = [f for f in os.listdir('.') if os.path.isfile(f)]
@@ -59,14 +60,15 @@ print(filenames)
 for filename in filenames:
     # TODO: Delete correct image
     print(filename)
-    writeZip.write(filename, compress_type=zipfile.ZIP_DEFLATED)
-writeZip.close()
+    # writeZip.write(filename, compress_type=zipfile.ZIP_DEFLATED)
+    # writeRar.write(filename, compress_type=zipfile.ZIP_DEFLATED)      # TODO: translate to RarFile functions and arguments
+# writeZip.close()
+writeRar.close()
 
 # Delete extraction directory
-os.chdir(testdir)
+# os.chdir(testdir)
 # print("Current working directory: " + os.getcwd())
-# os.remove(extractDirname)
-shutil.rmtree(extractDirname)
+# shutil.rmtree(extractDirname)
 
 
 
