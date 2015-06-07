@@ -1,3 +1,6 @@
+Source: 
+https://github.com/miebach/lib-rar-python/blob/v0.4/README
+
 This package asissts using the command line version of rar on linux
 
 
