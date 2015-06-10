@@ -5,8 +5,6 @@ __author__ = 'Tim Shimmin'
 import os, shutil, rarfile
 from librar import archive
 
-story = ""
-
 # initialize directory
 testdir = 'D:\\Users\\Kat\\Documents\\GitHub\\Unmarkt\\test\\'
 os.chdir(testdir)  # make it the active directory
