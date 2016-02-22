@@ -58,13 +58,14 @@ writeZip = zipfile.ZipFile('written ' + comic, 'a')      # 'a' for append to cur
 #         writeZip.write(extractDir + '//' + filename, compress_type=zipfile.ZIP_DEFLATED)
 
 os.chdir(extractDir)                        # TODO: stay in parent folder?
-filenames = [f for f in os.listdir('.') if os.path.isfile(f)]
+filenames = [f for f in os.listdir('.') if os.path.isfile(f)]       # TODO: Figure out how to parse this. https://docs.python.org/3.4/library/os.html#os.listdir
 print(filenames)
 for filename in filenames:
     # TODO: Delete correct image
-    # print(filename)
-    if filename != '4.bmp':
+    # print(filename.find)
+    # if filename != '4.bmp':
     # if filename.parse('4') != '':
+    if filename.find('4') == -1:
         writeZip.write(filename, compress_type=zipfile.ZIP_DEFLATED)
         print(filename)
 writeZip.close()
