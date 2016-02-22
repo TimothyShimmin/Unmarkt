@@ -6,10 +6,14 @@ import zipfile, os, shutil
 
 
 # initialize directory
-testdir = 'D:\\Users\\Kat\\Documents\\GitHub\\Unmarkt\\test\\'
-os.chdir(testdir)  # make it the active directory
-
+# testdir = 'D:\\Users\\Kat\\Documents\\GitHub\\Unmarkt\\test\\'
+testdir = 'C:\\Users\\Tim.Shimmin\\Documents\\GitHub\\Unmarkt\\test\\'
 comic = 'spider-man.zip'  # name of the comic
+
+# testdir = 'C:\\Users\\Tim.Shimmin\\Documents\\GitHub\\Unmarkt\\test2\\'
+# comic = 'spider-man.cbz'  # name of the comic
+
+os.chdir(testdir)  # make it the active directory
 
 
 # Extract from zip file
@@ -58,9 +62,25 @@ filenames = [f for f in os.listdir('.') if os.path.isfile(f)]
 print(filenames)
 for filename in filenames:
     # TODO: Delete correct image
-    print(filename)
-    writeZip.write(filename, compress_type=zipfile.ZIP_DEFLATED)
+    # print(filename)
+    if filename != '4.bmp':
+    # if filename.parse('4') != '':
+        writeZip.write(filename, compress_type=zipfile.ZIP_DEFLATED)
+        print(filename)
 writeZip.close()
+
+# Rename zip to cbz
+os.chdir(testdir)
+print(writeZip.filename)
+# open(writeZip.filename)
+# print(shutil.move(writeZip.filename, writeZip.filename.replace('.zip', '.cbz')))
+os.remove(writeZip.filename.replace('.zip', '.cbz'))
+os.rename(writeZip.filename, writeZip.filename.replace('.zip', '.cbz'))
+
+
+# writeZip.close()
+
+
 
 # Delete extraction directory
 os.chdir(testdir)
