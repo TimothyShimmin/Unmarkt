@@ -15,7 +15,8 @@ class archiveType(Enum):
 testdir = 'D:\\Users\\Kat\\Documents\\GitHub\\Unmarkt\\test\\'
 os.chdir(testdir)  # make it the active directory
 
-comic = 'spider-man.cbr'    # name of the comic
+# comic = 'spider-man.cbr'    # name of the comic
+comic = 'spider-man (2).cbz'    # name of the comic
 comicType = archiveType.cbz # assuming cbz until notified if CBR
 
 if comic.endswith(".cbr"):
@@ -51,7 +52,7 @@ if os.path.isfile('written ' + comic):
 writeZip = zipfile.ZipFile('written ' + comic, 'a')      # 'a' for append to current
 # print(os.getcwd())
 
-
+# TODO: go down another level; only sees the comic folder's folder when writing, not the images in it. Recursive search?
 os.chdir(extractDirname)                        # TODO: stay in parent folder? minimize switching folders?
 filenames = [f for f in os.listdir('.') if os.path.isfile(f)]
 print(filenames)
@@ -70,7 +71,7 @@ writeZip.close()
 # Delete extraction directory
 os.chdir(testdir)
 # print("Current working directory: " + os.getcwd())
-# shutil.rmtree(extractDirname)
+shutil.rmtree(extractDirname)
 
 
 
