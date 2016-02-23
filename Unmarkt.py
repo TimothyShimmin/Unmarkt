@@ -4,6 +4,7 @@ __author__ = 'Tim Shimmin'
 
 import zipfile, os, shutil
 
+# TODO: List of rls groups is user-editable
 
 # initialize directory
 # testdir = 'D:\\Users\\Kat\\Documents\\GitHub\\Unmarkt\\test\\'
@@ -15,9 +16,9 @@ comic = 'spider-man.zip'  # name of the comic
 
 os.chdir(testdir)  # make it the active directory
 
+# TODO: Extract from cbr
 
 # Extract from zip file
-# TODO: Extract from cbr
 # print(os.path.isfile(comic))
 # if os.path.isfile(comic):             # checks if this comic exists
 extractZip = zipfile.ZipFile(comic)     # set existing zip to this variable
@@ -27,6 +28,7 @@ extractZip = zipfile.ZipFile(comic)     # set existing zip to this variable
 # extractZip.extractall(testdir + '\\' + extractZip.filename)
 
 # extractDir = testdir + 'this ' + str(1)
+# TODO: Use find and substr to remove extension? Or enum solution from cbr-func
 extractDir = testdir + comic.replace('.zip', '')
 print("Extracting here: " + extractDir)
 extractZip.extractall(extractDir)
@@ -38,8 +40,8 @@ extractZip.close()
 
 
 
-# Write to zip file
-# TODO: Write to cbz
+
+# Write to cbz      --- # Write to zip file
 os.chdir(testdir)  # make it the active directory
 # writeZip = zipfile.ZipFile(comic, 'w')    # 'w' for write (overwrite)
 if os.path.isfile('written ' + comic):
@@ -57,15 +59,12 @@ writeZip = zipfile.ZipFile('written ' + comic, 'a')      # 'a' for append to cur
 #     for filename in filenames:
 #         writeZip.write(extractDir + '//' + filename, compress_type=zipfile.ZIP_DEFLATED)
 
+# Remove correct image
 os.chdir(extractDir)                        # TODO: stay in parent folder?
-filenames = [f for f in os.listdir('.') if os.path.isfile(f)]       # TODO: Figure out how to parse this. https://docs.python.org/3.4/library/os.html#os.listdir
+filenames = [f for f in os.listdir('.') if os.path.isfile(f)]
 print(filenames)
 for filename in filenames:
-    # TODO: Delete correct image
-    # print(filename.find)
-    # if filename != '4.bmp':
-    # if filename.parse('4') != '':
-    if filename.find('4') == -1:
+    if filename.find('4') == -1:        # TODO: Parsing method that checks all different kinds of rls groups.
         writeZip.write(filename, compress_type=zipfile.ZIP_DEFLATED)
         print(filename)
 writeZip.close()
@@ -73,21 +72,16 @@ writeZip.close()
 # Rename zip to cbz
 os.chdir(testdir)
 print(writeZip.filename)
-# open(writeZip.filename)
-# print(shutil.move(writeZip.filename, writeZip.filename.replace('.zip', '.cbz')))
 os.remove(writeZip.filename.replace('.zip', '.cbz'))
 os.rename(writeZip.filename, writeZip.filename.replace('.zip', '.cbz'))
-
-
-# writeZip.close()
 
 
 
 # Delete extraction directory
 os.chdir(testdir)
+shutil.rmtree(extractDir)
 # print("Current working directory: " + os.getcwd())
 # os.remove(extractDir)
-shutil.rmtree(extractDir)
 
 
 
