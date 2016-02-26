@@ -1,9 +1,11 @@
 #! python3
 # Unmarkt.py - Removes release group tags from digital comic books (cbr).
 __author__ = 'Tim Shimmin'
+# TODO: START @ LINE 103 --- Pull images from folder-within-archive instead of just the archive --- os.walk?
+# TODO: Move TODOs to GitHub issues?
 # TODO: Move to separate methods
-# TODO: Pull images from folder-within-archive instead of just the archive --- os.walk?
-
+# TODO: Move new comic to different directory, leaving original untouched in case of mistakes --- option in settings?
+# TODO: Rename archive to remove rls tag? each image in archive? bit excessive maybe
 # region imports
 import os, shutil, zipfile
 from enum import Enum
@@ -17,33 +19,32 @@ class archiveType(Enum):
     cbr = 3
 
 # region # initialize directory
-print(os.path.dirname(os.path.realpath(__file__)))
+# print(os.path.dirname(os.path.realpath(__file__)))
 testdir = os.path.dirname(os.path.realpath(__file__)) + '\\test\\'
 print(testdir)
-# testdir = 'D:\\Users\\Kat\\Documents\\GitHub\\Unmarkt\\test\\'
-# testdir = 'C:\\Users\\Tim.Shimmin\\Documents\\GitHub\\Unmarkt\\test\\'
 # print(os.listdir(testdir))
 os.chdir(testdir)  # make it the active directory
 # endregion
 
 # region Comic filename
 # testdir = 'C:\\Users\\Tim.Shimmin\\Documents\\GitHub\\Unmarkt\\test2\\'
-# comic = 'spider-man.cbz'  # name of the comic
-comic = 'spider-man (2).cbz'  # name of the comic
+comic = 'spider-man.cbz'  # name of the comic
+# comic = 'spider-man (2).cbz'  # without folder in archive ---name of the comic
 # endregion
 
 
-#region# TODO: Extract from cbr
+# region# TODO: Extract from cbr, etc
 if comic.endswith('.cb7'):
     comicType = archiveType.cb7
 if comic.endswith('.cbz'):
     comicType = archiveType.cbz
 if comic.endswith('.cbr'):
     comicType = archiveType.cbr
-#endregion
+# endregion
 
 # region # Extract from zip file
 if not os.path.isfile(comic):           # exit if comic doesn't exist
+    print('Comic <' + comic + '> does not exist')
     exit(126)                           # http://tldp.org/LDP/abs/html/exitcodes.html
 # print(os.path.isfile(comic))
 extractZip = zipfile.ZipFile(comic)     # set existing zip to this variable
@@ -62,12 +63,12 @@ if comic.endswith('.cbr'):
     extractDir = testdir + comic.replace('.cbr', '')
 # extractDir = testdir + comic      # TODO: change above to comic = comic.replace(...), use this instead
 # extractDir = testdir + comic.find('.cb')
-print("Extracting here: " + extractDir)
+# print("Extracting here: " + extractDir)
 extractZip.extractall(extractDir)
 
 # extractZip.extractall()
 extractZip.close()
-#endregion
+# endregion
 
 
 
@@ -93,7 +94,15 @@ writeZip = zipfile.ZipFile('written ' + comic, 'a')      # 'a' for append to cur
 
 # Remove correct image / write to new file without it
 os.chdir(extractDir)                        # TODO: stay in parent folder?
-filenames = [f for f in os.listdir('.') if os.path.isfile(f)]
+# directories = [d for d in os.walk('.') if os.path.isfile(d)]
+# print(directories)
+for files in os.walk('.'):
+    print(files)
+    # print(files[1][0])
+    # print(os.walk('.')[2][0])
+    # if '.\\'.join(files[1]) == files[0]:        # TODO: files[1] is from first 'files' in os.walk, files[0] is from second 'files' in os.walk
+        # TODO: take files[2] for new archive                  # files[2] is from second 'files' in os.walk
+filenames = [f for f in os.listdir('.') if os.path.isfile(f[2])]
 print(filenames)
 for filename in filenames:
     if filename.find('zzz') == -1:        # TODO: Parsing method that checks all different kinds of rls groups.
