@@ -1,10 +1,6 @@
 #! python3
 # Unmarkt.py - Removes release group tags from digital comic books (cbr).
 __author__ = 'Tim Shimmin'
-# TODO: Move TODOs to GitHub issues?
-# TODO: Move to separate methods
-# TODO: Move new comic to different directory, leaving original untouched in case of mistakes --- option in settings?
-# TODO: Rename archive to remove rls tag? each image in archive? bit excessive maybe
 # region imports
 import os, shutil, zipfile
 from enum import Enum
@@ -50,7 +46,6 @@ extractZip = zipfile.ZipFile(comic)     # set existing zip to this variable
 # extractZip.extractall(testdir + '\\' + extractZip.filename)
 
 # extractDir = testdir + 'this ' + str(1)
-# TODO: Use find and substr to remove extension? Or enum solution from cbr-func
 if comic.endswith('.zip'):
     extractDir = testdir + comic.replace('.zip', '')
 if comic.endswith('.cbz'):
@@ -78,8 +73,6 @@ if os.path.isfile('written ' + comic):
 writeZip = zipfile.ZipFile('written ' + comic, 'a')      # 'a' for append to current
 
 
-# for img in os.listdir(extractDir):        # TODO: type check
-#     writeZip.write(img, compress_type=zipfile.ZIP_DEFLATED)
 
 # os.chdir(extractDir)
 # writeZip.write(extractDir, compress_type=zipfile.ZIP_DEFLATED)    # saves directory folder structure, not the file(s) inside that directory
@@ -89,7 +82,7 @@ writeZip = zipfile.ZipFile('written ' + comic, 'a')      # 'a' for append to cur
 #         writeZip.write(extractDir + '//' + filename, compress_type=zipfile.ZIP_DEFLATED)
 
 # Remove correct image / write to new file without it
-os.chdir(extractDir)                        # TODO: stay in parent folder?
+os.chdir(extractDir)
 # directories = [d for d in os.walk('.') if os.path.isfile(d)]
 # print(directories)
 for root, dirs, files in os.walk('.'):
@@ -100,17 +93,17 @@ for root, dirs, files in os.walk('.'):
             print(dirs[0])
 for root, dirs, files in os.walk('.'):
     for file in files:
-        if file.find('zzz') == -1:        # TODO: Parsing method that checks all different kinds of rls groups.
+        if file.find('zzz') == -1:
             writeZip.write(file, compress_type=zipfile.ZIP_DEFLATED)
             print(file)
     # print(files[1][0])
     # print(os.walk('.')[2][0])
-    # if '.\\'.join(files[1]) == files[0]:        # TODO: files[1] is from first 'files' in os.walk, files[0] is from second 'files' in os.walk
-        # TODO: take files[2] for new archive                  # files[2] is from second 'files' in os.walk
+    # if '.\\'.join(files[1]) == files[0]:        # files[1] is from first 'files' in os.walk, files[0] is from second 'files' in os.walk
+        # take files[2] for new archive                  # files[2] is from second 'files' in os.walk
 # filenames = [f for f in os.listdir('.') if os.path.isfile(f[2])]
 # print(filenames)
 # for filename in filenames:
-#     if filename.find('zzz') == -1:        # TODO: Parsing method that checks all different kinds of rls groups.
+#     if filename.find('zzz') == -1:
 #         writeZip.write(filename, compress_type=zipfile.ZIP_DEFLATED)
 #         print(filename)
 writeZip.close()
