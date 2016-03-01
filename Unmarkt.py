@@ -25,7 +25,7 @@ comic = 'spider-man.cbz'  # name of the comic
 # endregion
 
 
-# region# TODO: Extract from cbr, etc
+# region# Comic types
 if comic.endswith('.cb7'):
     comicType = archiveType.cb7
 if comic.endswith('.cbz'):
