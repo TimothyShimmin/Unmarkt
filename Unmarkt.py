@@ -25,7 +25,6 @@ comic = 'spider-man.cbz'  # name of the comic
 # endregion
 
 
-# region# Comic types
 def findComicType(comic):
     if comic.endswith('.cb7'):
         comicType = archiveType.cb7
@@ -35,10 +34,6 @@ def findComicType(comic):
         comicType = archiveType.cbr
     return comicType
 
-comicType = findComicType(comic)
-# endregion
-
-# region # Extract from zip file
 def extractZip():
     if not os.path.isfile(comic):           # exit if comic doesn't exist
         print('Comic <' + comic + '> does not exist')
@@ -66,13 +61,6 @@ def extractZip():
     extractArchive.close()
     return extractDir
 
-extractDir = extractZip()       # *** NOT how I intend to do this, OBVIOUSLY.
-# endregion
-
-
-
-
-# Write to cbz      --- # Write to zip file
 def writeToCbz():
     os.chdir(testdir)  # make it the active directory
     # writeZip = zipfile.ZipFile(comic, 'w')    # 'w' for write (overwrite)
@@ -119,6 +107,28 @@ def writeToCbz():
 #         print(filename)
     writeZip.close()
     return
+
+def cleanUp():
+    os.chdir(testdir)
+    shutil.rmtree(extractDir)
+    return
+
+
+
+# region# Comic types
+
+comicType = findComicType(comic)
+# endregion
+
+# region # Extract from zip file
+
+extractDir = extractZip()       # *** NOT how I intend to do this, OBVIOUSLY.
+# endregion
+
+
+
+
+# Write to cbz      --- # Write to zip file
 writeToCbz()
 
 # region # Rename zip to cbz     --- not sure how this works anymore but it might be useful for cbr
@@ -130,10 +140,6 @@ writeToCbz()
 # endregion
 
 # region # Delete extraction directory
-def cleanUp():
-    os.chdir(testdir)
-    shutil.rmtree(extractDir)
-    return
 # print("Current working directory: " + os.getcwd())
 # os.remove(extractDir)
 # endregion
