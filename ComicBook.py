@@ -10,7 +10,7 @@ class archiveType(Enum):
 
 
 class ComicBook:
-    'Type for comic books in Unmarkt'
+    """Type for comic books in Unmarkt"""
     def __init__(self, filename):
         self.directory = ''     # os.getcwd()??
         self.fileName = filename
@@ -68,6 +68,7 @@ class ComicBook:
         #     print('Comic <' + self.getFileName() + '> does not exist')
         #     exit(126)                           # http://tldp.org/LDP/abs/html/exitcodes.html
         # if self.getComicType() == archiveType.cbz:
+        # print(self.getFileName())
         extractArchive = zipfile.ZipFile(self.getFileName())     # set existing zip to this variable
         self.extractDir = self.getDirectory() + self.getComicName()
         # print("Extracting here: " + extractDir)
@@ -77,12 +78,19 @@ class ComicBook:
         extractArchive.close()
         return self.extractDir       # TODO: Throwing around directories probably isn't the way to go
 
-    def writeToCbz(self):
+    def writeToCbz(self):   #TODO: add parameter for custom filter. list of strings?
         os.chdir(self.getDirectory())  # make it the active directory       # TODO: might not need this if use os.walk?
         # writeZip = zipfile.ZipFile(comic, 'w')    # 'w' for write (overwrite)
-        if os.path.isfile('written ' + self.getComicName()):
-            os.remove('written ' + self.getComicName())
-        writeZip = zipfile.ZipFile('written ' + self.getComicName(), 'a')      # 'a' for append to current
+
+        # if os.path.isfile('written ' + self.getComicName()):
+        #     os.remove('written ' + self.getComicName())
+        # print(self.getComicName())
+        # writeZip = zipfile.ZipFile('written ' + self.getComicName(), 'a')      # 'a' for append to current
+
+        if os.path.isfile('written ' + self.getFileName()):
+            os.remove('written ' + self.getFileName())
+        writeZip = zipfile.ZipFile('written ' + self.getFileName(), 'a')      # 'a' for append to current
+
         # return writeZip
     # writeZip = writeToCbz()
 
