@@ -43,6 +43,7 @@ coverage.xml
 # Personal additions
 .idea/
 test/
+test2/
 
 
 # Translations
