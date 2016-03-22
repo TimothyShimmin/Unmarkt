@@ -1,17 +1,12 @@
 #! python3
-# Unmarkt.py - Removes release group tags from digital comic books (cbr).
+# Unmarkt.py - Removes ads from digital comic books (cbz, cbr).
 __author__ = 'Tim Shimmin'
 # region imports
-import os, shutil, zipfile
-from enum import Enum
+import ComicBook, os, sys
+# import os, shutil, zipfile, sys
 # import rarfile
 # from librar import archive
 # endregion
-
-class archiveType(Enum):
-    cb7 = 1
-    cbz = 2
-    cbr = 3
 
 # region # initialize directory
 testdir = os.path.dirname(os.path.realpath(__file__)) + '\\test\\'
@@ -24,125 +19,16 @@ comic = 'spider-man.cbz'  # name of the comic
 # comic = 'spider-man (2).cbz'  # without folder in archive ---name of the comic
 # endregion
 
+book = ComicBook.ComicBook(comic)
+book.directory = testdir
 
-def findComicType(comic):
-    if comic.endswith('.cb7'):
-        comicType = archiveType.cb7
-    if comic.endswith('.cbz'):
-        comicType = archiveType.cbz
-    if comic.endswith('.cbr'):
-        comicType = archiveType.cbr
-    return comicType
+book.findComicType()
+book.findComicName()
 
-def extractZip():
-    if not os.path.isfile(comic):           # exit if comic doesn't exist
-        print('Comic <' + comic + '> does not exist')
-        exit(126)                           # http://tldp.org/LDP/abs/html/exitcodes.html
-# print(os.path.isfile(comic))
-    extractArchive = zipfile.ZipFile(comic)     # set existing zip to this variable
-# extractArchive.namelist()                 # read list of file names
+book.extractZip()
 
-# print(testdir + os.sep + extractArchive.filename)
-# extractArchive.extractall(testdir + '\\' + extractArchive.filename)
+book.writeToCbz()
 
-# extractDir = testdir + 'this ' + str(1)
-    if comic.endswith('.zip'):
-        extractDir = testdir + comic.replace('.zip', '')
-    if comic.endswith('.cbz'):
-        extractDir = testdir + comic.replace('.cbz', '')
-    if comic.endswith('.cbr'):
-        extractDir = testdir + comic.replace('.cbr', '')
-# extractDir = testdir + comic      # TODO: change above to comic = comic.replace(...), use this instead
-# extractDir = testdir + comic.find('.cb')
-# print("Extracting here: " + extractDir)
-    extractArchive.extractall(extractDir)
+book.cleanUp()
 
-# extractArchive.extractall()
-    extractArchive.close()
-    return extractDir
-
-def writeToCbz():
-    os.chdir(testdir)  # make it the active directory
-    # writeZip = zipfile.ZipFile(comic, 'w')    # 'w' for write (overwrite)
-    if os.path.isfile('written ' + comic):
-        os.remove('written ' + comic)
-    writeZip = zipfile.ZipFile('written ' + comic, 'a')      # 'a' for append to current
-    # return writeZip
-# writeZip = writeToCbz()
-
-
-
-# os.chdir(extractDir)
-# writeZip.write(extractDir, compress_type=zipfile.ZIP_DEFLATED)    # saves directory folder structure, not the file(s) inside that directory
-
-# for foldername, subfolders, filenames in os.walk(extractDir):
-#     for filename in filenames:
-#         writeZip.write(extractDir + '//' + filename, compress_type=zipfile.ZIP_DEFLATED)
-
-# Remove correct image / write to new file without it
-# def writeZip():
-    os.chdir(extractDir)
-# directories = [d for d in os.walk('.') if os.path.isfile(d)]
-# print(directories)
-    for root, dirs, files in os.walk('.'):
-        print(dirs)
-        if dirs:
-            if dirs[0] != '':
-                os.chdir(dirs[0])
-                print(dirs[0])
-    for root, dirs, files in os.walk('.'):
-        for file in files:
-            if file.find('zzz') == -1:
-                writeZip.write(file, compress_type=zipfile.ZIP_DEFLATED)
-                print(file)
-    # print(files[1][0])
-    # print(os.walk('.')[2][0])
-    # if '.\\'.join(files[1]) == files[0]:        # files[1] is from first 'files' in os.walk, files[0] is from second 'files' in os.walk
-        # take files[2] for new archive                  # files[2] is from second 'files' in os.walk
-# filenames = [f for f in os.listdir('.') if os.path.isfile(f[2])]
-# print(filenames)
-# for filename in filenames:
-#     if filename.find('zzz') == -1:
-#         writeZip.write(filename, compress_type=zipfile.ZIP_DEFLATED)
-#         print(filename)
-    writeZip.close()
-    return
-
-def cleanUp():
-    os.chdir(testdir)
-    shutil.rmtree(extractDir)
-    return
-
-
-
-# region# Comic types
-
-comicType = findComicType(comic)
-# endregion
-
-# region # Extract from zip file
-
-extractDir = extractZip()       # *** NOT how I intend to do this, OBVIOUSLY.
-# endregion
-
-
-
-
-# Write to cbz      --- # Write to zip file
-writeToCbz()
-
-# region # Rename zip to cbz     --- not sure how this works anymore but it might be useful for cbr
-# if writeZip.filename.endswith('.zip'):
-#     os.chdir(testdir)
-#     print(writeZip.filename)
-#     os.remove(writeZip.filename.replace('.zip', '.cbz'))
-#     os.rename(writeZip.filename, writeZip.filename.replace('.zip', '.cbz'))
-# endregion
-
-# region # Delete extraction directory
-# print("Current working directory: " + os.getcwd())
-# os.remove(extractDir)
-# endregion
-cleanUp()
-
-
+sys.exit()
